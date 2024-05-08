@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import prisma from '@/db/db'
+import { formatCurrency, formatNumber } from '@/lib/formatters'
 
 async function getSalesData() {
   const salesData = await prisma.order.aggregate({
@@ -23,11 +24,11 @@ export default async function AdminDashboard() {
   const salesData = await getSalesData()
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
       <DashBoardCard
-        title="Sales"
-        subtitle={salesData.numSales.toString() + ' orders'}
-        body={salesData.amount.toString()}
+        title='Sales'
+        subtitle={formatNumber(salesData.numSales) + ' orders'}
+        body={formatCurrency(salesData.amount)}
       />
       {/* <DashBoardCard title="Sales" subtitle="Test" body="body" /> */}
       {/* <DashBoardCard title="Sales" subtitle="Test" body="body" /> */}
@@ -47,8 +48,8 @@ function DashBoardCard({ title, body, subtitle }: DashboardCardProps) {
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
+        <CardDescription>{subtitle}</CardDescription>
       </CardHeader>
-      <CardDescription>{subtitle}</CardDescription>
       <CardContent>
         <p>{body}</p>
       </CardContent>
